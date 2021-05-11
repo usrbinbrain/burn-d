@@ -9,7 +9,6 @@
 
 # Function deploy sysrc service.
 sysrc_() {
-
   script=$1
   # Sysrc daemon name.
   dname=${script%%.*}_d
@@ -32,7 +31,6 @@ sysrc_() {
 
 # Function deploy systemd service.
 systemd_() {
-
   script=$1
   # Systemd deamon file content.
   ctl_f='[Unit]\nDescription='${script%%.*}' service\nAfter=network.target\nStartLimitIntervalSec=0\n\n[Service]\nType=simple\nRestart=always\nRestartSec=1\nUser=root\nExecStart='${PWD}'/'${script}'\n\n[Install]\nWantedBy=multi-user.target'
@@ -49,9 +47,10 @@ systemd_() {
 
 # Function run deploys.
 run_() {
-
+  #Check OS
+  os=$(uname)
   # Check system and run.
-  [ -f '/usr/sbin/sysrc' ] && sysrc_ "$1" || [ -f '/usr/bin/systemd' ] && systemd_ "$1" ||
+  [ "${os,,}" == 'freebsd' ] && sysrc_ "$1" || [ "${os,,}" == 'linux' ] && systemd_ "$1" ||
   # Cant execution info.
   printf "[-] Cant locate sysrc or systemd.\n" && exit
 }
