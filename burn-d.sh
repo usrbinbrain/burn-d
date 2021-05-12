@@ -49,8 +49,7 @@ systemd_() {
 run_() {
   #Check OS
   os=$(uname)
-  # Check system and run.
-  [ "${os,,}" == 'freebsd' ] && sysrc_ "$1" || [ "${os,,}" == 'linux' ] && systemd_ "$1" ||
+  [ "${os}" == 'FreeBSD' ] && sysrc_ "$1" || [ "${os}" == 'Linux' ] && systemd_ "$1" ||
   # Cant execution info.
   printf "[-] Cant locate sysrc or systemd.\n" && exit
 }
