@@ -5,26 +5,40 @@
 # Args          :script file on first argument.
 # Script repo   :https://github.com/tr4kthebox/burn-d
 # Author        :G.A.Gama
-#
 
 # Function deploy sysrc service.
 sysrc_() {
-  script=$1
+  local script=$1
   # Sysrc daemon name.
-  dname=${script%%.*}_d
-  # Sysrc deamon file content.
-  rc_f='#!/bin/sh\n. /etc/rc.subr\nname='${dname}'\nrcvar='${dname}'_enable\npidfile="/var/run/${name}.pid"\nlogfile="/tmp/${name}.log"\nscript_command="'${PWD}'/'${script}'"\ncommand="/usr/sbin/daemon"\ncommand_args="-P ${pidfile} -o ${logfile} -r -f ${script_command}"\nload_rc_config $name\nrun_rc_command "$1"'
-
+  local dname=${script%%.*}_d
   # Write daemon file on /usr/local/etc/rc.d/ with ".sh" ext.
-  rcd='/usr/local/etc/rc.d/'
-  dfile=${rcd}${script%%.*}.sh
-  printf "${rc_f}" > "${dfile}" && chmod +x "${dfile}" && ln -s "${dfile}" "${rcd}${dname}"
+  local rcd='/usr/local/etc/rc.d/'
+  local dfile=${rcd}${script%%.*}.sh
+
+  # Write config file service on "/usr/local/etc/rc.d/".
+  cat > ${dfile} <<EOF
+#!/bin/sh
+. /etc/rc.subr
+name=${dname}
+rcvar=${dname}_enable
+pidfile="/var/run/\${name}.pid"
+logfile="/tmp/\${name}.log"
+script_command="${PWD}/${script}"
+command="/usr/sbin/daemon"
+command_args="-P \${pidfile} -o \${logfile} -r -f \${script_command}"
+load_rc_config \$name
+run_rc_command "\$1"
+EOF
+
+  # Add execution mode and create daemon shortcut.
+  chmod +x "${dfile}" && ln -s "${dfile}" "${rcd}${dname}"
 
   # Enable service on rc.
   sysrc -e "${dname}_enable=YES"
 
   # Show service name.
   printf "[+] Sysrc service ( ${dname} ) created on ${dfile} !\n"
+
   exit
 }
 
