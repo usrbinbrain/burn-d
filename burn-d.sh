@@ -46,12 +46,28 @@ EOF
 # Function deploy systemd service.
 systemd_() {
   script=$1
-  # Systemd deamon file content.
-  ctl_f='[Unit]\nDescription='${script%%.*}' service\nAfter=network.target\nStartLimitIntervalSec=0\n\n[Service]\nType=simple\nRestart=always\nRestartSec=1\nUser=root\nExecStart='${PWD}'/'${script}'\n\n[Install]\nWantedBy=multi-user.target'
-
   # Write daemon file on '/etc/systemd/system/' with ".service" ext.
   dfile='/etc/systemd/system/'${script%%.*}'.service'
-  printf "${ctl_f}" > "${dfile}" && chmod +x "${dfile}"
+
+  cat > ${dfile} <<EOF
+[Unit]
+Description=${script%%.*} service
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+ExecStart=${PWD}/${script}
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+  # Add execution mode.
+  chmod +x "${dfile}"
 
   # Show service name.
   printf "[+] Systemd service ( ${script%%.*} ) created on ${dfile} !\n"
