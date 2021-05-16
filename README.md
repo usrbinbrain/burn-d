@@ -14,7 +14,7 @@
 Clone repo and modify `burn-d.sh` execution permissions.
 
 ```bash
-git clone https://github.com/tr4kthebox/burn-d.git && cd burn-d && chmod +x burn-d.sh
+git clone https://github.com/usrbinbrain/burn-d.git && cd burn-d && chmod +x burn-d.sh
 ```
 For a better experience create and add `burn-d` alias in your bashrc.
 ```bash
