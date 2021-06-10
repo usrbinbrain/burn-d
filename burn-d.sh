@@ -3,7 +3,7 @@
 # Script Name   :burn-d.sh
 # Description   :Configure script as a daemon on systems managed by systemd or sysrc.
 # Args          :script file on first argument.
-# Script repo   :https://github.com/tr4kthebox/burn-d
+# Script repo   :https://github.com/usrbinbrain/burn-d
 # Author        :G.A.Gama
 
 # Function deploy sysrc service.
