@@ -18,7 +18,7 @@ git clone https://github.com/usrbinbrain/burn-d.git && chmod +x burn-d/burn-d.sh
 ```
 For a better experience create and add `burn-d` alias in your bashrc.
 ```bash
-alias burn-d=$PWD/burn-d.sh && echo "alias burn-d=$PWD/burn-d.sh" >> $HOME/.bashrc
+alias burn-d=$PWD/burn-d.sh && echo "alias burn-d=$PWD/burn-d/burn-d.sh" >> $HOME/.bashrc
 ```
 
 ---
